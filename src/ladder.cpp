@@ -97,7 +97,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         for (const string& word : word_list) {
             if (is_adjacent(last_word, word) && visited.find(word) == visited.end()) {
                 visited.insert(word);
-                vector<string> new_ladder = ladder;
+                vector<string> new_ladder = current_ladder;
                 new_ladder.push_back(word);
                 
                 if (word == end_word) {
