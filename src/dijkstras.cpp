@@ -1,27 +1,76 @@
 #include "dijkstras.h"
 using namespace std;
 
+// vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous) {
+//     vector<int> distances(G.size(), INF);
+//     distances[source] = 0;
+    
+//     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> queue;
+//     queue.push({0, source});
+//     previous.assign(G.size(), -1);
+    
+//     while (!queue.empty()) {
+//         int distance = queue.top().first;
+//         int vertex = queue.top().second;
+//         queue.pop();
+//         for (auto& e : G[vertex]) {
+//         if (distances[vertex] + e.weight < distances[e.dst]) {
+//             distances[e.dst] = distances[vertex] + e.weight;
+//             queue.push({distances[e.dst], e.dst});
+//             previous[e.dst] = vertex;
+//         }
+//         }
+//     }
+//     return distances;
+// }
+
+struct Node {
+    int vertex;
+    int weight;
+    
+    Node(int v, int w) : vertex(v), weight(w) {}
+    
+    bool operator>(const Node& other) const {
+        return weight > other.weight;
+    }
+};
+
 vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous) {
-    vector<int> distances(G.size(), INF);
-    distances[source] = 0;
+    int n = G.size();
     
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> queue;
-    queue.push({0, source});
-    previous.assign(G.size(), -1);
+    vector<int> distance(n, INF);
+    previous.assign(n, -1);
+    vector<bool> visited(n, false);
     
-    while (!queue.empty()) {
-        auto [distance, vertex] = queue.top();
-        queue.pop();
+    priority_queue<Node, vector<Node>, greater<Node>> pq;
+    pq.push(Node(source, 0));
+    distance[source] = 0;
+    
+    while (!pq.empty()) {
+        Node current = pq.top();
+        pq.pop();
         
-        for (const auto& e : G[vertex]) {
-            if (distances[vertex] + e.weight < distances[e.dst]) {
-                distances[e.dst] = distances[vertex] + e.weight;
-                queue.push({distances[e.dst], e.dst});
-                previous[e.dst] = vertex;
+        int u = current.vertex;
+        
+        if (visited[u]) {
+            continue;
+        }
+        
+        visited[u] = true;
+        
+        for (const auto& e : G[u]) {
+            int v = e.dst;
+            int weight = e.weight;
+            
+            if (!visited[v] && distance[u] + weight < distance[v]) {
+                distance[v] = distance[u] + weight;
+                previous[v] = u;
+                pq.push(Node(v, distance[v]));
             }
         }
     }
-    return distances;
+    
+    return distance;
 }
 
 vector<int> extract_shortest_path(const vector<int>& distances, const vector<int>& previous, int destination) {
@@ -40,20 +89,7 @@ vector<int> extract_shortest_path(const vector<int>& distances, const vector<int
 }
 
 void print_path(const vector<int>& v, int total) {
-    // if (path.empty()) {
-    //     cout << "\nTotal cost is " << total << endl;
-    //     return;
-    // }
-
-    // for (int i = 0; i < v.size(); ++i) {
-    //     cout << v[i];
-    //     if (i < v.size() - 1) {
-    //         cout << " ";
-    //     }
-    // }
-    // cout << "\nTotal cost is " << total << endl;
-
-    if (v.empty()) {
+    if (v.empty()) { //todo: do not know if this is needed
         cout << "\nTotal cost is " << total << endl;
         return;
     }
@@ -64,5 +100,4 @@ void print_path(const vector<int>& v, int total) {
         }
     }
     cout << " \nTotal cost is " << total << endl;
-    
 }

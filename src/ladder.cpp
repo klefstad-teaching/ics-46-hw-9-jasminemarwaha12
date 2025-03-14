@@ -72,10 +72,10 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
     queue<vector<string>> ladder_queue;
     ladder_queue.push({begin_word});
     
-    set<string> visited = {begin_word};
+    set<string> visited = {begin_word}; //todo: his pseucode says to use .insert
     
     while (!ladder_queue.empty()) {
-        vector<string> current_ladder = ladder_queue.front();
+        vector<string> current_ladder = ladder_queue.front(); //todo: change var name to ladder
         ladder_queue.pop();
         string last_word = current_ladder.back();
         
@@ -84,8 +84,8 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         }
         
         for (const string& word : word_list) {
-            if (is_adjacent(last_word, word) && visited.find(word) == visited.end()) {
-                visited.insert(word);
+            if (is_adjacent(last_word, word) && visited.find(word) == visited.end()) { //todo: do i need the &&?
+                visited.insert(word); //todo: check for the not visited?
                 vector<string> new_ladder = current_ladder;
                 new_ladder.push_back(word);
                 
