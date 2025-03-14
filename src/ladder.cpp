@@ -77,48 +77,47 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         return {};
     }
     
-    // Queue to store partial ladders
     queue<vector<string>> ladder_queue;
     
-    // Start with the begin word in the first ladder
     ladder_queue.push({begin_word});
     
-    // Keep track of visited words to avoid cycles and redundant paths
     set<string> visited;
     visited.insert(begin_word);
     
     while (!ladder_queue.empty()) {
-        // Get the first ladder from the queue
         vector<string> current_ladder = ladder_queue.front();
         ladder_queue.pop();
         
-        // Get the last word in the current ladder
         string last_word = current_ladder.back();
         
-        // If we've reached the end word, return this ladder
         if (last_word == end_word) {
             return current_ladder;
         }
         
-        // Check each word in the dictionary
         for (const string& word : word_list) {
-            // Skip words we've already visited
-            if (visited.find(word) != visited.end()) {
-                continue;
-            }
-            
-            // Check if this word is adjacent to the last word in our ladder
-            if (is_adjacent(last_word, word)) {
-                // Mark this word as visited
+            if (is_adjacent(last_word, word) && visited.find(word) == visited.end()) {
                 visited.insert(word);
-                
-                // Create a new ladder with this word appended
-                vector<string> new_ladder = current_ladder;
+                vector<string> new_ladder = ladder;
                 new_ladder.push_back(word);
                 
-                // Add to queue for further processing
+                if (word == end_word) {
+                return new_ladder;
+                }
+                
                 ladder_queue.push(new_ladder);
             }
+            // if (visited.find(word) != visited.end()) {
+            //     continue;
+            // }
+            
+            // if (is_adjacent(last_word, word)) {
+            //     visited.insert(word);
+                
+            //     vector<string> new_ladder = current_ladder;
+            //     new_ladder.push_back(word);
+                
+            //     ladder_queue.push(new_ladder);
+            // }
         }
     }
     
@@ -127,23 +126,29 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
 }
 
 void load_words(set<string>& word_list, const string& file_name) {
-    ifstream file(file_name);
+    ifstream word_file(file_name);
     string word;
     
-    if (!file) {
-        cerr << "Error: Could not open file " << file_name << endl;
-        return;
-    }
-    
-    while (file >> word) {
-        // Convert to lowercase for consistent comparison
-        for (char& c : word) {
-            c = tolower(c);
-        }
+    while (word_file >> word) {
         word_list.insert(word);
-    }
+  }
+    // ifstream file(file_name);
+    // string word;
     
-    file.close();
+    // if (!file) {
+    //     cerr << "Error: Could not open file " << file_name << endl;
+    //     return;
+    // }
+    
+    // while (file >> word) {
+    //     // Convert to lowercase for consistent comparison
+    //     for (char& c : word) {
+    //         c = tolower(c);
+    //     }
+    //     word_list.insert(word);
+    // }
+    
+    // file.close();
 }
 
 void print_word_ladder(const vector<string>& ladder) {
@@ -164,15 +169,32 @@ void print_word_ladder(const vector<string>& ladder) {
 }
 
 void verify_word_ladder() {
-    #define my_assert(e) {cout << #e << ((e) ? " passed": " failed") << endl;}
+    // #define my_assert(e) {cout << #e << ((e) ? " passed": " failed") << endl;}
     
+    // set<string> word_list;
+    // load_words(word_list, "words.txt");
+    
+    // my_assert(generate_word_ladder("cat", "dog", word_list).size() == 4);
+    // my_assert(generate_word_ladder("marty", "curls", word_list).size() == 6);
+    // my_assert(generate_word_ladder("code", "data", word_list).size() == 6);
+    // my_assert(generate_word_ladder("work", "play", word_list).size() == 6);
+    // my_assert(generate_word_ladder("sleep", "awake", word_list).size() == 8);
+    // my_assert(generate_word_ladder("car", "cheat", word_list).size() == 4);
+
     set<string> word_list;
     load_words(word_list, "words.txt");
+    string begin_word, end_word;
     
-    my_assert(generate_word_ladder("cat", "dog", word_list).size() == 4);
-    my_assert(generate_word_ladder("marty", "curls", word_list).size() == 6);
-    my_assert(generate_word_ladder("code", "data", word_list).size() == 6);
-    my_assert(generate_word_ladder("work", "play", word_list).size() == 6);
-    my_assert(generate_word_ladder("sleep", "awake", word_list).size() == 8);
-    my_assert(generate_word_ladder("car", "cheat", word_list).size() == 4);
+    cout << "Enter the start word: ";
+    cin >> begin_word;
+    cout << "Enter the end word: ";
+    cin >> end_word;
+    
+    if (begin_word == end_word) {
+        error(begin_word, end_word, "The start and end words are the same.");
+        return;
+    }
+    
+    vector<string> ladder = generate_word_ladder(begin_word, end_word, word_list);
+    print_word_ladder(ladder);
 }
