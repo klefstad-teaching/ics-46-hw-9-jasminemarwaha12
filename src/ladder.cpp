@@ -5,6 +5,11 @@ void error(string word1, string word2, string msg) {
 }
 
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d) {
+    // The test expects identical strings to be within edit distance 1
+    if (str1 == str2) {
+        return true;
+    }
+    
     int len1 = str1.length();
     int len2 = str2.length();
     
@@ -26,7 +31,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
                     return false;
                 }
             }
-            return differences == 1; // Must be exactly 1 difference, not 0
+            return differences <= d; // Changed back to <= d to match test expectation
         } 
         // If lengths differ by 1, check insertion/deletion
         else if (abs(len1 - len2) == 1) {
@@ -54,7 +59,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
                 differences += longer.length() - j;
             }
             
-            return differences == 1; // Must be exactly 1 difference
+            return differences <= d; // Changed back to <= d to match test expectation
         }
     }
     
@@ -62,14 +67,14 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
 }
 
 bool is_adjacent(const string& word1, const string& word2) {
-    // Two words are adjacent if their edit distance is exactly 1
+    // Based on tests, identical words are considered adjacent
     return edit_distance_within(word1, word2, 1);
 }
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
-    // If start and end words are the same, return empty vector (per test requirements)
+    // If start and end words are the same, return empty vector per test requirements
     if (begin_word == end_word) {
-        return {}; // Return empty vector instead of {begin_word}
+        return {};
     }
     
     // Queue to store partial ladders
@@ -90,6 +95,11 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         // Get the last word in the current ladder
         string last_word = current_ladder.back();
         
+        // If we've reached the end word, return this ladder
+        if (last_word == end_word) {
+            return current_ladder;
+        }
+        
         // Check each word in the dictionary
         for (const string& word : word_list) {
             // Skip words we've already visited
@@ -106,12 +116,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
                 vector<string> new_ladder = current_ladder;
                 new_ladder.push_back(word);
                 
-                // If we've reached the end word, return this ladder
-                if (word == end_word) {
-                    return new_ladder;
-                }
-                
-                // Otherwise, add this new ladder to the queue for further processing
+                // Add to queue for further processing
                 ladder_queue.push(new_ladder);
             }
         }
