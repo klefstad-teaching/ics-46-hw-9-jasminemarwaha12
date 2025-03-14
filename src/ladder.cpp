@@ -8,11 +8,14 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
     int len1 = str1.length();
     int len2 = str2.length();
     
+    // If difference in length is greater than d, edit distance is at least that difference
     if (abs(len1 - len2) > d) {
         return false;
     }
     
+    // For Homework 9, we only care about edit distance of 1
     if (d == 1) {
+        // If lengths are the same, only one character can differ
         if (len1 == len2) {
             int differences = 0;
             for (int i = 0; i < len1; i++) {
@@ -23,8 +26,9 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
                     return false;
                 }
             }
-            return differences <= d;
+            return differences == 1; // Must be exactly 1 difference, not 0
         } 
+        // If lengths differ by 1, check insertion/deletion
         else if (abs(len1 - len2) == 1) {
             const string& shorter = (len1 < len2) ? str1 : str2;
             const string& longer = (len1 < len2) ? str2 : str1;
@@ -38,66 +42,82 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
                     j++;
                 } else {
                     differences++;
-                    j++;  
+                    j++;  // Skip one character in the longer string
                     if (differences > d) {
                         return false;
                     }
                 }
             }
             
+            // If we've gone through the shorter string but not the longer one
             if (j < longer.length()) {
                 differences += longer.length() - j;
             }
             
-            return differences <= d;
+            return differences == 1; // Must be exactly 1 difference
         }
     }
     
-    return false; 
-} 
+    return false;  // Default case
+}
 
 bool is_adjacent(const string& word1, const string& word2) {
+    // Two words are adjacent if their edit distance is exactly 1
     return edit_distance_within(word1, word2, 1);
 }
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
+    // If start and end words are the same, return empty vector (per test requirements)
     if (begin_word == end_word) {
-        return {begin_word};
+        return {}; // Return empty vector instead of {begin_word}
     }
     
+    // Queue to store partial ladders
     queue<vector<string>> ladder_queue;
     
+    // Start with the begin word in the first ladder
     ladder_queue.push({begin_word});
     
+    // Keep track of visited words to avoid cycles and redundant paths
     set<string> visited;
     visited.insert(begin_word);
     
     while (!ladder_queue.empty()) {
+        // Get the first ladder from the queue
         vector<string> current_ladder = ladder_queue.front();
         ladder_queue.pop();
         
+        // Get the last word in the current ladder
         string last_word = current_ladder.back();
         
+        // Check each word in the dictionary
         for (const string& word : word_list) {
+            // Skip words we've already visited
             if (visited.find(word) != visited.end()) {
                 continue;
             }
             
+            // Check if this word is adjacent to the last word in our ladder
             if (is_adjacent(last_word, word)) {
+                // Mark this word as visited
                 visited.insert(word);
                 
+                // Create a new ladder with this word appended
                 vector<string> new_ladder = current_ladder;
                 new_ladder.push_back(word);
                 
+                // If we've reached the end word, return this ladder
                 if (word == end_word) {
                     return new_ladder;
                 }
                 
+                // Otherwise, add this new ladder to the queue for further processing
                 ladder_queue.push(new_ladder);
             }
         }
     }
     
+    // If we get here, no ladder was found
     return {};
 }
 
@@ -111,6 +131,7 @@ void load_words(set<string>& word_list, const string& file_name) {
     }
     
     while (file >> word) {
+        // Convert to lowercase for consistent comparison
         for (char& c : word) {
             c = tolower(c);
         }
@@ -126,15 +147,15 @@ void print_word_ladder(const vector<string>& ladder) {
         return;
     }
     
-    cout << "Word ladder found (" << ladder.size() << " words):" << endl;
-    
+    // Format changed to match expected output format in tests
+    cout << "Word ladder found: ";
     for (size_t i = 0; i < ladder.size(); i++) {
         cout << ladder[i];
         if (i < ladder.size() - 1) {
-            cout << " → ";
+            cout << " ";
         }
     }
-    cout << endl;
+    cout << " " << endl;
 }
 
 void verify_word_ladder() {
