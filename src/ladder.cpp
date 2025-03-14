@@ -17,7 +17,7 @@ bool edit_distance_within(const string& str1, const string& str2, int d) {
         return false;
     }
     
-    if (d == 1) { //todo: check 
+    if (d == 1) { //todo: check/modify
         if (len1 == len2) {
             int differences = 0;
             for (int i = 0; i < len1; i++) {
