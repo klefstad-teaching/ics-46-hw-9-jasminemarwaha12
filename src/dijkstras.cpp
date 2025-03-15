@@ -24,6 +24,8 @@ using namespace std;
 //     return distances;
 // }
 
+//pseudocode on hw 
+
 struct Node {
     int vertex;
     int weight;
@@ -89,10 +91,10 @@ vector<int> extract_shortest_path(const vector<int>& /*distances*/, const vector
 }
 
 void print_path(const vector<int>& v, int total) {
-    if (v.empty()) { //todo: do not know if this is needed
-        cout << "\nTotal cost is " << total << endl;
-        return;
-    }
+    // if (v.empty()) { //todo: do not know if this is needed
+    //     cout << "\nTotal cost is " << total << endl;
+    //     return;
+    // }
     for (size_t i = 0; i < v.size(); ++i) {
         cout << v[i];
         if (i < v.size() - 1) {
