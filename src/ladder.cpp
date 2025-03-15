@@ -6,60 +6,42 @@ void error(string word1, string word2, string msg) {
 }
 
 bool edit_distance_within(const string& str1, const string& str2, int d) {
-    int len1 = str1.length(); //todo: length or size
-    int len2 = str2.length();
-
-    if (str1 == str2) {
-        return true;
-    }
-    
-    if (abs(len1 - len2) > d) {
+    int str_length1 = str1.size();
+    int str_length2 = str2.size();
+    // if (str1 == str2) {
+    //     return true;
+    // }
+    if (abs(str_length1 - str_length2) > d) {
         return false;
     }
-    
-    if (d == 1) { //todo: check/modify
-        if (len1 == len2) {
-            int differences = 0;
-            for (int i = 0; i < len1; i++) {
-                if (str1[i] != str2[i]) {
-                    differences++;
-                }
-                if (differences > d) {
-                    return false;
-                }
+    int edit_count_word = 0;
+    int i = 0;
+    int j = 0;
+    while (i < str_length1 && j < str_length2) {
+        if (str1[i] != str2[j]) {
+            if (edit_count_word == d) {
+                return false;
             }
-            return differences <= d; 
-        } 
-        else if (abs(len1 - len2) == 1) {
-            const string& shorter = (len1 < len2) ? str1 : str2;
-            const string& longer = (len1 < len2) ? str2 : str1;
-            
-            //int j = 0;
-            int differences = 0;
-            size_t j = 0;
-            
-            for (size_t i = 0; i < shorter.length() && j < longer.length(); ) {
-                if (shorter[i] == longer[j]) {
-                    i++;
-                    j++;
-                } else {
-                    differences++;
-                    j++;  
-                    if (differences > d) {
-                        return false;
-                    }
-                }
+            if (str_length1 > str_length2) {
+                i++;
+            } else if (str_length1 < str_length2) {
+                j++;
+            } else {
+                i++;
+                j++;
             }
-            
-            if (j < longer.length()) {
-                differences += longer.length() - j;
-            }
-            
-            return differences <= d; 
+            edit_count_word++;
+        } else {
+        i++;
+        j++;
         }
     }
-    
-    return false;  
+    if (i < str_length1) {
+        edit_count_word += (str_length1 - i);
+    } else if (j < str_length2) {
+        edit_count_word += (str_length2 - j);
+    }
+    return edit_count_word <= d;
 }
 
 bool is_adjacent(const string& word1, const string& word2) {
