@@ -1,29 +1,6 @@
 #include "dijkstras.h"
 using namespace std;
 
-// vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous) {
-//     vector<int> distances(G.size(), INF);
-//     distances[source] = 0;
-    
-//     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> queue;
-//     queue.push({0, source});
-//     previous.assign(G.size(), -1);
-    
-//     while (!queue.empty()) {
-//         int distance = queue.top().first;
-//         int vertex = queue.top().second;
-//         queue.pop();
-//         for (auto& e : G[vertex]) {
-//         if (distances[vertex] + e.weight < distances[e.dst]) {
-//             distances[e.dst] = distances[vertex] + e.weight;
-//             queue.push({distances[e.dst], e.dst});
-//             previous[e.dst] = vertex;
-//         }
-//         }
-//     }
-//     return distances;
-// }
-
 //pseudocode on hw 
 
 struct Node {
@@ -91,17 +68,6 @@ vector<int> extract_shortest_path(const vector<int>& /*distances*/, const vector
 }
 
 void print_path(const vector<int>& v, int total) {
-    // if (v.empty()) { //todo: do not know if this is needed
-    //     cout << "\nTotal cost is " << total << endl;
-    //     return;
-    // }
-    // for (size_t i = 0; i < v.size(); ++i) {
-    //     cout << v[i];
-    //     if (i < v.size() - 1) {
-    //         cout << " ";
-    //     }
-    // }
-    // cout << " \nTotal cost is " << total << endl;
     for (size_t i = 0; i < v.size(); ++i) {
         cout << v[i] << " ";
     }
