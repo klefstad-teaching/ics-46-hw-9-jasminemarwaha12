@@ -95,11 +95,15 @@ void print_path(const vector<int>& v, int total) {
     //     cout << "\nTotal cost is " << total << endl;
     //     return;
     // }
+    // for (size_t i = 0; i < v.size(); ++i) {
+    //     cout << v[i];
+    //     if (i < v.size() - 1) {
+    //         cout << " ";
+    //     }
+    // }
+    // cout << " \nTotal cost is " << total << endl;
     for (size_t i = 0; i < v.size(); ++i) {
-        cout << v[i];
-        if (i < v.size() - 1) {
-            cout << " ";
-        }
+        cout << v[i] << " ";
     }
-    cout << "\nTotal cost is " << total << endl;
+    cout << "\nTotal cost is " << total << "\n";
 }
