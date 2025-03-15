@@ -34,10 +34,11 @@ bool edit_distance_within(const string& str1, const string& str2, int d) {
             const string& shorter = (len1 < len2) ? str1 : str2;
             const string& longer = (len1 < len2) ? str2 : str1;
             
-            int j = 0;
+            //int j = 0;
             int differences = 0;
+            size_t j = 0;
             
-            for (int i = 0; i < shorter.length() && j < longer.length(); ) {
+            for (size_t i = 0; i < shorter.length() && j < longer.length(); ) {
                 if (shorter[i] == longer[j]) {
                     i++;
                     j++;
@@ -88,7 +89,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
             if (is_adjacent(last_word, word)) {
                 if (visited.find(word) == visited.end()) {
                     visited.insert(word); 
-                    vector<string> new_ladder = current_ladder;
+                    vector<string> new_ladder = ladder;
                     new_ladder.push_back(word);
                     
                     if (word == end_word) {
@@ -145,18 +146,18 @@ void verify_word_ladder() {
 
     //set<string> word_list;
     //load_words(word_list, "words.txt");
-    string begin_word, end_word;
+    // string begin_word, end_word;
     
-    cout << "Enter the start word: ";
-    cin >> begin_word;
-    cout << "Enter the end word: ";
-    cin >> end_word;
+    // cout << "Enter the start word: ";
+    // cin >> begin_word;
+    // cout << "Enter the end word: ";
+    // cin >> end_word;
     
-    if (begin_word == end_word) {
-        error(begin_word, end_word, "The start and end words are the same!");
-        return;
-    }
+    // if (begin_word == end_word) {
+    //     error(begin_word, end_word, "The start and end words are the same!");
+    //     return;
+    // }
     
-    vector<string> ladder = generate_word_ladder(begin_word, end_word, word_list);
-    print_word_ladder(ladder);
+    // vector<string> ladder = generate_word_ladder(begin_word, end_word, word_list);
+    // print_word_ladder(ladder);
 }
