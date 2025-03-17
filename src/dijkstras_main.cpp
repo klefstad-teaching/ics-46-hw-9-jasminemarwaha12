@@ -3,7 +3,6 @@
 int main(int argc, char* argv[]) {
     if (argc < 2) {
         cerr << "Usage: " << argv[0] << " file " << endl;
-        //return 1;
     }
     
     //try {
@@ -17,10 +16,10 @@ int main(int argc, char* argv[]) {
     
     for (int i = 0; i < G.numVertices; i++) {
         vector<int> v = extract_shortest_path(distances, previous, i);
-        print_path(v, distances[i] == INF ? -1 : distances[i]);
+        print_path(v, distances[i]);
     }
     //} catch (const exception& e) {
-       // cerr << "Error! M " << e.what() << endl;
+       // cerr << "Error!  " << e.what() << endl;
         //return 1;
     //}
     

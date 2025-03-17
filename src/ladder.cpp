@@ -8,9 +8,7 @@ void error(string word1, string word2, string msg) {
 bool edit_distance_within(const string& str1, const string& str2, int d) {
     int str_length1 = str1.size();
     int str_length2 = str2.size();
-    // if (str1 == str2) {
-    //     return true;
-    // }
+    
     if (abs(str_length1 - str_length2) > d) {
         return false;
     }
@@ -114,6 +112,7 @@ void print_word_ladder(const vector<string>& ladder) {
 }
 
 void verify_word_ladder() {
+    //on hw 
     #define my_assert(e) {cout << #e << ((e) ? " passed": " failed") << endl;}
     
     set<string> word_list;
@@ -125,21 +124,4 @@ void verify_word_ladder() {
     my_assert(generate_word_ladder("work", "play", word_list).size() == 6);
     my_assert(generate_word_ladder("sleep", "awake", word_list).size() == 8);
     my_assert(generate_word_ladder("car", "cheat", word_list).size() == 4);
-
-    //set<string> word_list;
-    //load_words(word_list, "words.txt");
-    // string begin_word, end_word;
-    
-    // cout << "Enter the start word: ";
-    // cin >> begin_word;
-    // cout << "Enter the end word: ";
-    // cin >> end_word;
-    
-    // if (begin_word == end_word) {
-    //     error(begin_word, end_word, "The start and end words are the same!");
-    //     return;
-    // }
-    
-    // vector<string> ladder = generate_word_ladder(begin_word, end_word, word_list);
-    // print_word_ladder(ladder);
 }
